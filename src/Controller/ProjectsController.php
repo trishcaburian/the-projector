@@ -22,10 +22,11 @@ class ProjectsController extends AbstractController
      */
     public function projectsPage()
     {
+        $user_object = $this->projectsViewModel->getFirstNameByUserId();
         $available_projects = $this->projectsViewModel->getAllProjects();
 
         return $this->render('projects/home.html.twig', [
-            'user' => $this->security->getUser(),
+            'user' => $user_object,
             'projects' => $available_projects
         ]);
     }
