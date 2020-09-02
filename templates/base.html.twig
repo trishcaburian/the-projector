@@ -6,9 +6,9 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% if user.first_name is defined %}
+        {% if first_name is defined %}
             <p>
-                Welcome {{ user.first_name }}! <a href="{{ path("app_logout") }}">Logout</a>
+                Welcome {{ first_name }}! <a href="{{ path("app_logout") }}">Logout</a>
             </p>
         {% endif %}
         <h1> The Projector </h1>

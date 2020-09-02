@@ -35,7 +35,7 @@ class ProjectsViewModel
 
         $user_object = $this->queryService->genericSQL($sql, ['user_id' => $id]);
 
-        return $user_object[0];
+        return $user_object[0]['first_name'];
     }
 
     private function getAllProjects()
