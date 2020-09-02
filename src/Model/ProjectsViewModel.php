@@ -21,7 +21,6 @@ class ProjectsViewModel
 
     public function getHomeViewData()
     {
-        $view_data = [];
         $user = $this->security->getUser();
 
         return [
