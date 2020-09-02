@@ -1,1 +1,32 @@
 {% extends "base.html.twig" %}
+{% block title %}Projects{% endblock %}
+
+{% block body %}
+    <div>
+        {% if projects %}
+            <table class="generic-table">
+                <tr>
+                    <th>Project Name</th>
+                    <th>Budget</th>
+                    <th>Tasks</th>
+                </tr>
+                {% for project in projects %}
+                    <tr>
+                        <td>{{ project.name }}</td>
+                        <td>{{ project.budget }}</td>
+                        <td>
+                            <a href="{{ path('homepage') }}">Assignments</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            No Projects Available.
+        {% endif %}
+    </div>
+
+    <div>
+        <a href="">Create Project</a> <br>
+        <a href="">Create Person</a>
+    </div>
+{% endblock %}
