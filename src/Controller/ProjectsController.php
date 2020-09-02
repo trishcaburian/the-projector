@@ -15,7 +15,7 @@ class ProjectsController extends AbstractController
     }
 
     /**
-     * @Route("/projects", name="homepage")
+     * @Route("/projects", name="homepage", methods={"GET"})
      */
     public function projectsPage()
     {
