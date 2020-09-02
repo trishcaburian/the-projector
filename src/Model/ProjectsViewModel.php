@@ -14,32 +14,46 @@ class ProjectsViewModel
         $this->entityManager = $entityManager;
         $this->security = $security;
     }
-    
-    public function getFirstNameByUserId()
+
+    public function getViewData()
     {
+        $view_data = [];
         $user = $this->security->getUser();
 
-        $sql = "SELECT * FROM persons WHERE user_id = :user_id limit 1";
+        $view_data['first_name'] = $this->getFirstName($user->getId());
+        $view_data['projects'] = $this->getAllProjects();
 
-        $user_object = $this->genericSQL($sql, ['user_id' => $user->getId()]);
+        return $view_data;
+    }
+    
+    private function getFirstName($id)
+    {
+        $sql = "SELECT first_name FROM persons WHERE user_id = :user_id limit 1";
+
+        $user_object = $this->genericSQL($sql, ['user_id' => $id]);
 
         return $user_object[0];
     }
 
-    public function getAllProjects()
+    private function getAllProjects()
     {
         $sql = "SELECT * FROM projects";
 
         return $this->genericSQL($sql);
     }
 
+    //move outside
     private function genericSQL($sql, $params = null)
     {
         $conn = $this->entityManager->getConnection();
-
+        
         $stmt = $conn->prepare($sql);
         $stmt->execute($params);
 
-        return $stmt->fetchAll();
+        $result = $stmt->fetchAll();
+
+        $conn->close();
+
+        return $result;
     }
 }

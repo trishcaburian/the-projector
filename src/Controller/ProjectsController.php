@@ -6,16 +6,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+
+use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectsController extends AbstractController
 {
     private $security;
-    private $projectsViewModel;
+    private $entityManager;
 
-    public function __construct(Security $security, ProjectsViewModel $projectsViewModel)
+    public function __construct(Security $security, EntityManagerInterface $entityManager)
     {
         $this->security = $security;
-        $this->projectsViewModel = $projectsViewModel;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -23,13 +26,14 @@ class ProjectsController extends AbstractController
      */
     public function projectsPage()
     {
-        $user_object = $this->projectsViewModel->getFirstNameByUserId();
-        $available_projects = $this->projectsViewModel->getAllProjects();
+        /*
+            var vm = new ProjectsViewModel(this.entityManager, this.security)
+                .Initialize();
+        */
 
-        return $this->render('projects/home.html.twig', [
-            'user' => $user_object,
-            'projects' => $available_projects
-        ]);
+        $projects_vm = new ProjectsViewModel($this->entityManager, $this->security);
+
+        return $this->render('projects/home.html.twig', $projects_vm->getViewData());
     }
 
     /**
@@ -45,6 +49,6 @@ class ProjectsController extends AbstractController
      */
     public function processProject(Request $request)
     {
-        
+        ///ee
     }
 }
