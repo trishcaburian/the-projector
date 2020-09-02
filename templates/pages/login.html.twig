@@ -11,6 +11,9 @@
     {% endif %}
 
     <form method="post">
+        <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+        >
         <div>
             Username: <input type="text" name="username" required autofocus>
         </div>
