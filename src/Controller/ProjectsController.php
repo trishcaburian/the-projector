@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Data\ProjectData;
+use App\Model\ProjectInputModel;
 use App\Model\ProjectsViewModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +46,13 @@ class ProjectsController extends AbstractController
      */
     public function processProject(Request $request)
     {
-        
+        $project_input_model = new ProjectInputModel();
+        $result = $project_input_model->createProject(new ProjectData($request));
+
+        if ($result->isValid) {
+            //redirect to home page, read up on flash session maybe?
+        } else {
+            //refresh create project site with message above
+        }
     }
 }

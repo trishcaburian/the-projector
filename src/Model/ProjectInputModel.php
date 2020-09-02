@@ -16,8 +16,12 @@ class ProjectInputModel
 
         if (count($errors) > 0) {
             $result->result_list = $errors;
+            $result->isValid = false;
         } else {
             $result->result_list = ["Project was successfully created."];
+            $result->isValid = true;
         }
+
+        return $result;
     }
 }
