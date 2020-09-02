@@ -70,8 +70,8 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         ];
 
         $user = new UserData();
-        $user->setUsername($credentials['username']);
-        $user->setPassword($credentials['password']);
+        $user->username = $credentials['username'];
+        $user->password = $credentials['password'];
 
         //VALIDATE THE USER HERE
         $errors = $this->validator->validate($user);

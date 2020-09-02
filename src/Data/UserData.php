@@ -17,7 +17,7 @@ class UserData
      *      allowEmptyString = false
      * )
      */
-    private $username;
+    public $username;
 
     /**
      * @Assert\Length(
@@ -28,27 +28,5 @@ class UserData
      *      allowEmptyString = false
      * )
      */
-    private $password;
-
-    // getters
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    // setters
-    public function setUsername(string $username)
-    {
-        $this->username = $username;
-    }
-
-    public function setPassword(string $password)
-    {
-        $this->password = $password;
-    }
+    public $password;
 }
