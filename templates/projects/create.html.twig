@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+{% block title %}Create Project{% endblock %}
+
+{% block body %}
+    <h2>Create Project</h2>
+    <form method="post">
+        <label for="code">Code</label><br>
+        <input type="text" id="code" required autofocus><br>
+
+        <label for="name">Name</label><br>
+        <input type="text" id="name" required><br>
+
+        <label for="budget">Budget</label><br>
+        <input type="number" id="budget" required><br>
+
+        <label for="remarks">Remarks</label><br>
+        <textarea id="remarks"></textarea><br> 
+        
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}
