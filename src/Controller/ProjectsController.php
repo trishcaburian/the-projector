@@ -46,7 +46,7 @@ class ProjectsController extends AbstractController
      */
     public function processProject(Request $request)
     {
-        $project_input_model = new ProjectInputModel();
+        $project_input_model = new ProjectInputModel($this->entityManager);
         $result = $project_input_model->createProject(new ProjectData($request));
 
         if ($result->isValid) {
