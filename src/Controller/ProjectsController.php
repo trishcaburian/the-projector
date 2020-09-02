@@ -26,14 +26,9 @@ class ProjectsController extends AbstractController
      */
     public function projectsPage()
     {
-        /*
-            var vm = new ProjectsViewModel(this.entityManager, this.security)
-                .Initialize();
-        */
-
         $projects_vm = new ProjectsViewModel($this->entityManager, $this->security);
 
-        return $this->render('projects/home.html.twig', $projects_vm->getViewData());
+        return $this->render('projects/home.html.twig', $projects_vm->getHomeViewData());
     }
 
     /**
@@ -49,6 +44,6 @@ class ProjectsController extends AbstractController
      */
     public function processProject(Request $request)
     {
-        ///ee
+        
     }
 }
