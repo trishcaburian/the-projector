@@ -30,19 +30,21 @@ class UserData
      */
     private $password;
 
+    // getters
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function setUsername(string $username)
-    {
-        $this->username = $username;
-    }
-
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    // setters
+    public function setUsername(string $username)
+    {
+        $this->username = $username;
     }
 
     public function setPassword(string $password)
