@@ -23,6 +23,8 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Data\UserData;
 
 class LoginAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
@@ -35,14 +37,22 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
     private $csrfTokenManager;
     private $passwordEncoder;
     private $twigEnvironment;
+    private $validator;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, Environment $twigEnvironment)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager, 
+        UrlGeneratorInterface $urlGenerator, 
+        CsrfTokenManagerInterface $csrfTokenManager, 
+        UserPasswordEncoderInterface $passwordEncoder, 
+        Environment $twigEnvironment,
+        ValidatorInterface $validator
+    ){
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->twigEnvironment = $twigEnvironment;
+        $this->validator = $validator;
     }
 
     public function supports(Request $request)
@@ -55,9 +65,24 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
     {
         $credentials = [
             'username' => $request->request->get('username'),
-            'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
+            'password' => $request->request->get('password')
         ];
+
+        $user = new UserData();
+        $user->setUsername($credentials['username']);
+        $user->setPassword($credentials['password']);
+
+        //VALIDATE THE USER HERE
+        $errors = $this->validator->validate($user);
+
+        if (count($errors) > 0) {
+            $messages = [];
+            foreach ($errors as $error) {
+                array_push($messages, $error->getMessage());
+            }
+            throw new CustomUserMessageAuthenticationException('Invalid Credentials', $messages);
+        }
+
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['username']
@@ -72,13 +97,12 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         // if (!$this->csrfTokenManager->isTokenValid($token)) {
         //     throw new InvalidCsrfTokenException();
         // }
-
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
-
-        // if (!$user) {
-        //     // fail authentication with a custom error
-        //     throw new CustomUserMessageAuthenticationException('Username could not be found.');
-        // }
+        
+        if (!$user) {
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('Username could not be found.');
+        }
 
         return $user;
     }
@@ -112,7 +136,11 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return new Response($this->twigEnvironment->render('pages/login.html.twig', ['message' => 'Invalid Username or Password.']));
+        if (!empty($exception->getMessageData())){
+            return new Response($this->twigEnvironment->render('pages/login.html.twig', ['messages' => $exception->getMessageData()]));
+        } else {
+            return new Response($this->twigEnvironment->render('pages/login.html.twig', ['messages' => [$exception->getMessageKey()]]));
+        }
     }
 
     protected function getLoginUrl()

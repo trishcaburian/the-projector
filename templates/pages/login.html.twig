@@ -2,8 +2,12 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-    {% if message is defined %}
-        <div>{{ message }}</div>
+    {% if messages is defined %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
     <form method="post">
