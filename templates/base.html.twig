@@ -6,6 +6,13 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% if user.username is defined %}
+            <p>
+                You are Logged in as {{ user.username }} <br>
+                <a href="{{ path("app_logout") }}">Logout</a>
+            </p>
+        {% endif %}
+        <h1> The Projector </h1>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

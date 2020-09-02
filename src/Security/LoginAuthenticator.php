@@ -133,7 +133,7 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
         // return new RedirectResponse($this->urlGenerator->generate('homepage'));
 
-        return new Response("it worked");
+        return new RedirectResponse($this->urlGenerator->generate('homepage'));
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
