@@ -12,7 +12,7 @@ class PersonData
      * 
      * @Assert\Length(
      *      min = 2,
-     *      max = 3,
+     *      max = 50,
      *      minMessage = "First name cannot be shorter than {{ limit }} letters.",
      *      maxMessage = "First name cannot be longer than {{ limit }} letters."
      * )
@@ -26,7 +26,7 @@ class PersonData
      * 
      * @Assert\Length(
      *      min = 2,
-     *      max = 3,
+     *      max = 50,
      *      minMessage = "Last name cannot be shorter than {{ limit }} letters.",
      *      maxMessage = "Last name cannot be longer than {{ limit }} letters."
      * )
