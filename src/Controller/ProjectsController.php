@@ -50,19 +50,7 @@ class ProjectsController extends AbstractController
      * @Route("/projects/create", name="process_project", methods={"POST"})
      */
     public function createProjectPost(Request $request)
-    {
-        /*
-            $createProjectArgs = $this->modelBinder->fromFormEncodedBody(CreateProjectCommandArgs::class, $request);
-            $commandResult = $this->projectService->createProject($createProjectArgs);
-
-            if ($commandResult->isSuccess()) {
-                // redirect
-            }
-
-            $vm = CreateProjectViewModel::createInstance($this->entityManager, $this->security)
-            return View('...', ['model' => $vm, 'errors' => $commandResult->getErrors()]);
-        */
-        
+    {        
         $input_model = new ProjectInputModel($request);
         $result = $this->projectService->createProject($input_model);
 
