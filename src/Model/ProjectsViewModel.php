@@ -24,7 +24,7 @@ class ProjectsViewModel
         $user = $this->security->getUser();
 
         return [
-            'first_name' => $this->getFirstName($user->getId()),
+            'first_name' => $user->getUsername(),
             'projects' => $this->getAllProjects()
         ];
     }

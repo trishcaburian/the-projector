@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+{% block title %}Create Person{% endblock %}
+
+{% block page_header %}Create Project{% endblock %}
+
+{% block body %}
+    <form method="post">
+        <label for="last_name">Last Name</label><br>
+        <input type="text" id="last_name" name="last_name" required><br>
+
+        <label for="first_name">First Name</label><br>
+        <input type="text" id="first_name" name="first_name" required></br>
+
+        <label for="user">User Account</label><br>
+        {# <select id="user" id="user">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select> #}
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
