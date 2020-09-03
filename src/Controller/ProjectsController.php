@@ -11,16 +11,19 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProjectsController extends AbstractController
 {
     private $security;
     private $entityManager;
+    private $validator;
 
-    public function __construct(Security $security, EntityManagerInterface $entityManager)
+    public function __construct(Security $security, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $this->security = $security;
         $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
 
     /**
@@ -46,13 +49,13 @@ class ProjectsController extends AbstractController
      */
     public function processProject(Request $request)
     {
-        $project_input_model = new ProjectInputModel($this->entityManager);
+        $project_input_model = new ProjectInputModel($this->entityManager, $this->validator);
         $result = $project_input_model->createProject(new ProjectData($request));
 
         if ($result->isValid) {
-            //redirect to home page, read up on flash session maybe?
+            return $this->redirect($this->generateUrl('homepage'));
         } else {
-            //refresh create project site with message above
+            return new Response($this->renderView('projects/create.html.twig', ['errors' => $result->result_list]));
         }
     }
 }

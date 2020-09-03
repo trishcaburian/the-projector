@@ -31,7 +31,7 @@ class ProjectsViewModel
     
     private function getFirstName($id)
     {
-        $sql = "SELECT first_name FROM persons WHERE user_id = :user_id limit 1";
+        $sql = "SELECT first_name FROM person WHERE user_id = :user_id limit 1";
 
         $user_object = $this->queryService->genericSQL($sql, ['user_id' => $id]);
 
@@ -40,7 +40,7 @@ class ProjectsViewModel
 
     private function getAllProjects()
     {
-        $sql = "SELECT * FROM projects";
+        $sql = "SELECT * FROM project";
 
         return $this->queryService->genericSQL($sql);
     }

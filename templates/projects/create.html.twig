@@ -3,18 +3,27 @@
 
 {% block body %}
     <h2>Create Project</h2>
+
+    {% if errors is defined %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <form method="post">
         <label for="code">Code</label><br>
-        <input type="text" id="code" required autofocus><br>
+        <input type="text" id="code" name="code" required autofocus><br>
 
         <label for="name">Name</label><br>
-        <input type="text" id="name" required><br>
+        <input type="text" id="name" name="name" required><br>
 
         <label for="budget">Budget</label><br>
-        <input type="number" id="budget" required><br>
+        <input type="number" id="budget" name="budget" required><br>
 
         <label for="remarks">Remarks</label><br>
-        <textarea id="remarks"></textarea><br> 
+        <textarea id="remarks" name="remarks"></textarea><br> 
         
         <button type="submit">Save</button>
     </form>
