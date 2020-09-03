@@ -11,20 +11,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProjectsController extends AbstractController
 {
     private $security;
     private $entityManager;
-    private $validator;
     private $projectService;
 
-    public function __construct(Security $security, EntityManagerInterface $entityManager, ValidatorInterface $validator, ProjectService $projectService)
+    public function __construct(Security $security, EntityManagerInterface $entityManager, ProjectService $projectService)
     {
         $this->security = $security;
         $this->entityManager = $entityManager;
-        $this->validator = $validator;
         $this->projectService = $projectService;
     }
 
