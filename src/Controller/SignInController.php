@@ -20,7 +20,7 @@ class SignInController extends AbstractController
     public function renderLogin()
     {
         if (!is_null($this->security->getUser())) {
-            //redirect to home page
+            return $this->redirect($this->generateUrl('homepage'));
         }
 
         return $this->render('pages/login.html.twig');
