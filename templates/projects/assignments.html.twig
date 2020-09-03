@@ -6,7 +6,9 @@
 {% block body %}
     <label for="add_user">New Member</label><br>
     <select id="add_user" name="add_user">
-        <option>Placeholder</option>
+        {% for non_member in non_members %}
+            <option value={{ non_member.id }}>{{ non_member.first_name }} {{ non_member.last_name }}</option>
+        {% endfor %}
     </select>
     <button type="submit">Add</button>
 
