@@ -28,9 +28,9 @@ class ProjectInputModel
      *      message = "{{ value }} cannot be blank"
      * )
      * 
-     * @Assert\Type(
-     *      type="alnum",
-     *      message = "Name can only have alphanumeric characters. (A-Z, 0-9)"
+     * @Assert\Regex(
+     *      pattern = "/^[a-zA-Z0-9 ]*$/",
+     *      message = "Name can only have alphanumeric characters (A-Z, 0-9) and spaces."
      * )
      * 
      * @Assert\Length(
