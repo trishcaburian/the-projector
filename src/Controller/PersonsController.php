@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Model\PersonInputModel;
+use App\Model\PersonViewModel;
 use App\Services\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,8 +29,9 @@ class PersonsController extends AbstractController
      */
     public function createPersonGet()
     {
+        $person_vm = new PersonViewModel($this->entityManager);
 
-        return $this->render('persons/create.html.twig');
+        return $this->render('persons/create.html.twig', ['users' => $person_vm->getUserList()]);
     }
 
     /**
@@ -44,7 +46,9 @@ class PersonsController extends AbstractController
         if ($result->isValid) {
             return $this->redirect($this->generateUrl('homepage'));
         } else {
-            return new Response($this->renderView('persons/create.html.twig', ['errors' => $result->result_list]));
+            return new Response($this->renderView('persons/create.html.twig', [
+                'errors' => $result->result_list
+            ]));
         }
     }
 }
