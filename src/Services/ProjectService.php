@@ -1,22 +1,65 @@
 <?php
 namespace App\Services;
 
-use App\Data\ProjectData;
-use Symfony\Component\HttpFoundation\Request;
+use App\Data\CommandResultData;
+use App\Entity\Project;
+use App\Model\ProjectInputModel;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProjectService
 {
-    public function generateProjectData(Request $request)
-    {
-        $project_data = new ProjectData();
+    private $entityManager;
+    private $validator;
 
-        if (!is_null($request)) {
-            $project_data->code = $request->request->get('code');
-            $project_data->name = $request->request->get('name');
-            $project_data->remarks = $request->request->get('remarks');
-            $project_data->budget = $request->request->get('budget');
+    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    {
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
+    }
+
+    public function createProject(ProjectInputModel $project)
+    {
+        $errors = $this->validator->validate($project);
+
+        $result = new CommandResultData();
+
+        if (count($errors) > 0) {
+            $result->setMessageList($errors);
+            $result->isValid = false;
+            return $result;
         }
 
-        return $project_data;
+        if ($this->isExistingProject($project->code)) {
+            $result->addMessage("That Project Code is already taken.");
+            $result->isValid = false;
+            return $result;
+        }
+
+        $project_entity = new Project();
+        $project_entity->setCode($project->code);
+        $project_entity->setName($project->name);
+        $project_entity->setRemarks($project->remarks);
+        $project_entity->setBudget($project->budget);
+
+        // $this->entityManager->persist($project_entity);
+
+        // $this->entityManager->flush();
+
+        $result->addMessage("Project was successfully created.");
+        $result->isValid = true;
+
+        return $result;
+    }
+
+    public function isExistingProject($code)
+    {
+        $result = $this->entityManager->getRepository(Project::class)->findOneBy(['code' => $code]);
+
+        if (!empty($result) || !is_null($result)) {
+            return true;
+        }
+
+        return false;
     }
 }

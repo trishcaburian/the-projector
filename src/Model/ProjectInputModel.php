@@ -1,47 +1,71 @@
 <?php
 namespace App\Model;
 
-use App\Data\CommandResultData;
-use App\Data\ProjectData;
-use App\Entity\Project;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ProjectInputModel
 {
-    private $entityManager;
-    private $validator;
+    /**
+     * @Assert\NotBlank(
+     *      message = "{{ value }} cannot be blank"
+     * )
+     * 
+     * @Assert\Type(
+     *      type="alnum",
+     *      message = "Code can only have alphanumeric characters. (A-Z, 0-9)"
+     * )
+     * 
+     * @Assert\Length(
+     *      max = 50,
+     *      maxMessage = "Code cannot be longer than {{ limit }} characters"
+     * )
+     */
+    public $code;
 
-    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    /**
+     * @Assert\NotBlank(
+     *      message = "{{ value }} cannot be blank"
+     * )
+     * 
+     * @Assert\Type(
+     *      type="alnum",
+     *      message = "Name can only have alphanumeric characters. (A-Z, 0-9)"
+     * )
+     * 
+     * @Assert\Length(
+     *      max = 50,
+     *      maxMessage = "Name cannot be longer than {{ limit }} characters"
+     * )
+     */
+    public $name;
+
+    /**
+     * @Assert\NotBlank(
+     *      message = "{{ value }} cannot be blank"
+     * )
+     */
+    public $remarks;
+
+    /**
+     * @Assert\NotBlank(
+     *      message = "{{ value }} cannot be blank"
+     * )
+     * 
+     * @Assert\Type(
+     *      type="numeric",
+     *      message = "Budget can only be a number."
+     * )
+     */
+    public $budget;
+    
+    public function __construct(Request $request)
     {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-    }
-
-    public function createProject(ProjectData $project)
-    {
-        $errors = $this->validator->validate($project);
-
-        $result = new CommandResultData();
-
-        if (count($errors) > 0) {
-            $result->result_list = $errors;
-            $result->isValid = false;
-        } else {
-            $project_entity = new Project();
-            $project_entity->setCode($project->code);
-            $project_entity->setName($project->name);
-            $project_entity->setRemarks($project->remarks);
-            $project_entity->setBudget($project->budget);
-
-            $this->entityManager->persist($project_entity);
-
-            $this->entityManager->flush();
-
-            $result->result_list = ["Project was successfully created."];
-            $result->isValid = true;
+        if (!is_null($request)) {
+            $this->code = $request->request->get('code');
+            $this->name = $request->request->get('name');
+            $this->remarks = $request->request->get('remarks');
+            $this->budget = $request->request->get('budget');
         }
-
-        return $result;
     }
 }

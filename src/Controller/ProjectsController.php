@@ -18,12 +18,14 @@ class ProjectsController extends AbstractController
     private $security;
     private $entityManager;
     private $validator;
+    private $projectService;
 
-    public function __construct(Security $security, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(Security $security, EntityManagerInterface $entityManager, ValidatorInterface $validator, ProjectService $projectService)
     {
         $this->security = $security;
         $this->entityManager = $entityManager;
         $this->validator = $validator;
+        $this->projectService = $projectService;
     }
 
     /**
@@ -39,7 +41,7 @@ class ProjectsController extends AbstractController
     /**
      * @Route("/projects/create", name="render_create_project", methods={"GET"})
      */
-    public function renderCreateProject()
+    public function createProjectGet()
     {
         return $this->render('projects/create.html.twig');
     }
@@ -47,17 +49,28 @@ class ProjectsController extends AbstractController
     /**
      * @Route("/projects/create", name="process_project", methods={"POST"})
      */
-    public function processProject(Request $request)
+    public function createProjectPost(Request $request)
     {
-        $project_input_model = new ProjectInputModel($this->entityManager, $this->validator);
-        $project_service = new ProjectService();
-        $result = $project_input_model->createProject($project_service->generateProjectData($request));
+        /*
+            $createProjectArgs = $this->modelBinder->fromFormEncodedBody(CreateProjectCommandArgs::class, $request);
+            $commandResult = $this->projectService->createProject($createProjectArgs);
+
+            if ($commandResult->isSuccess()) {
+                // redirect
+            }
+
+            $vm = CreateProjectViewModel::createInstance($this->entityManager, $this->security)
+            return View('...', ['model' => $vm, 'errors' => $commandResult->getErrors()]);
+        */
+        
+        $input_model = new ProjectInputModel($request);
+        $result = $this->projectService->createProject($input_model);
 
         if ($result->isValid) {
             return $this->redirect($this->generateUrl('homepage'));
-        } else {
-            return new Response($this->renderView('projects/create.html.twig', ['errors' => $result->result_list]));
         }
+
+        return new Response($this->renderView('projects/create.html.twig', ['errors' => $result->getMessages()]));
     }
 
     /**
@@ -65,6 +78,9 @@ class ProjectsController extends AbstractController
      */
     public function viewAssignments(int $id)
     {
-        var_dump($id);die;
+        $project_view_model = new ProjectsViewModel($this->entityManager, $this->security);
+        $member_list = $project_view_model->getProjectData($id);
+
+        return $this->render('projects/assignments.html.twig', ['members' => $member_list]);
     }
 }
