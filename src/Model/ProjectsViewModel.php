@@ -28,6 +28,11 @@ class ProjectsViewModel
             'projects' => $this->getAllProjects()
         ];
     }
+
+    public function getProjectData($project_id)
+    {
+        $members = $this->getMembersOfProject($project_id);
+    }
     
     private function getFirstName($id)
     {
@@ -43,5 +48,17 @@ class ProjectsViewModel
         $sql = "SELECT * FROM project";
 
         return $this->queryService->genericSQL($sql);
+    }
+
+    private function getMembersOfProject($project_id)
+    {
+        $sql = "SELECT p.* FROM person AS p 
+                JOIN projectassignments as pa
+                WHERE pa.project_id = :project_id
+                AND pa.person_id = p.id";
+
+        $member_list = $this->queryService->genericSQL($sql, ['project_id' => $project_id]);
+
+        return $member_list;
     }
 }
