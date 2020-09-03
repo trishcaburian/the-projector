@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Model\PersonInputModel;
+use App\Services\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -27,5 +29,21 @@ class PersonsController extends AbstractController
     public function renderCreatePerson()
     {
         return $this->render('persons/create.html.twig');
+    }
+
+    /**
+     * @Route("/persons/create", name="process_person", methods={"POST"})
+     */
+    public function processPerson(Request $request)
+    {
+        $person_input_model = new PersonInputModel($this->entityManager, $this->validator);
+        $person_service = new PersonService();
+        $result = $person_input_model->createPerson($person_service->generatePersonData($request));
+
+        if ($result->isValid) {
+            return $this->redirect($this->generateUrl('homepage'));
+        } else {
+            return new Response($this->renderView('persons/create.html.twig', ['errors' => $result->result_list]));
+        }
     }
 }
