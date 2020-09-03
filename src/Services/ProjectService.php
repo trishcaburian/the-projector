@@ -42,9 +42,9 @@ class ProjectService
         $project_entity->setRemarks($project->remarks);
         $project_entity->setBudget($project->budget);
 
-        // $this->entityManager->persist($project_entity);
+        $this->entityManager->persist($project_entity);
 
-        // $this->entityManager->flush();
+        $this->entityManager->flush();
 
         $result->addMessage("Project was successfully created.");
         $result->isValid = true;
