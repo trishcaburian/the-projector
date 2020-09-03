@@ -1,6 +1,7 @@
 <?php
 namespace App\Model;
 
+use App\Entity\Project;
 use App\Services\QueryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -24,23 +25,16 @@ class ProjectsViewModel
         $user = $this->security->getUser();
 
         return [
-            'first_name' => $user->getUsername(),
             'projects' => $this->getAllProjects()
         ];
     }
 
     public function getProjectData($project_id)
     {
-        $members = $this->getMembersOfProject($project_id);
-    }
-    
-    private function getFirstName($id)
-    {
-        $sql = "SELECT first_name FROM person WHERE user_id = :user_id limit 1";
-
-        $user_object = $this->queryService->genericSQL($sql, ['user_id' => $id]);
-
-        return $user_object[0]['first_name'];
+        return [
+            'project_info' => $this->entityManager->getRepository(Project::class)->findOneBy(['id' => $project_id]),
+            'members' => $this->getMembersOfProject($project_id),
+        ];
     }
 
     private function getAllProjects()

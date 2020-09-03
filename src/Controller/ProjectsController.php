@@ -64,8 +64,7 @@ class ProjectsController extends AbstractController
     public function viewAssignments(int $id)
     {
         $project_view_model = new ProjectsViewModel($this->entityManager, $this->security);
-        $member_list = $project_view_model->getProjectData($id);
 
-        return $this->render('projects/assignments.html.twig', ['members' => $member_list]);
+        return $this->render('projects/assignments.html.twig', $project_view_model->getProjectData($id));
     }
 }

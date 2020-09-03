@@ -1,7 +1,21 @@
 {% extends "base.html.twig" %}
-{% block title %}Project Assignment - [Project Name]{% endblock %}
+{% block title %}Project Assignment - [{{ project_info.name }}]{% endblock %}
 
-{% block page_header %}Project - [name]{% endblock %}
+{% block page_header %}Project Assignments - [{{ project_info.name }}]{% endblock %}
 
 {% block body %}
+    <label for="add_user">New Member</label><br>
+    <select id="add_user" name="add_user">
+        <option>Placeholder</option>
+    </select>
+    <button type="submit">Add</button>
+
+    <table>
+        {% for member in members %}
+            <tr>
+                <td>{{ member.first_name }} {{ member.last_name }}</td>
+                <td><a href="">Remove</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
