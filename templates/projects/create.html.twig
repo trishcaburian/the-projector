@@ -1,16 +1,9 @@
 {% extends "base.html.twig" %}
 {% block title %}Create Project{% endblock %}
 
-{% block body %}
-    <h2>Create Project</h2>
+{% block page_header %}Create Project{% endblock %}
 
-    {% if errors is defined %}
-        <ul>
-            {% for error in errors %}
-                <li>{{ error.message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+{% block body %}
 
     <form method="post">
         <label for="code">Code</label><br>
