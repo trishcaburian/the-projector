@@ -1,7 +1,6 @@
 <?php
 namespace App\Data;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ProjectData
@@ -33,14 +32,4 @@ class ProjectData
      * )
      */
     public $budget;
-
-    public function __construct(Request $request = null)
-    {
-        if (!is_null($request)) {
-            $this->code = $request->request->get('code');
-            $this->name = $request->request->get('name');
-            $this->remarks = $request->request->get('remarks');
-            $this->budget = $request->request->get('budget');
-        }
-    }
 }

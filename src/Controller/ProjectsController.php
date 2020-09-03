@@ -1,9 +1,9 @@
 <?php
 namespace App\Controller;
 
-use App\Data\ProjectData;
 use App\Model\ProjectInputModel;
 use App\Model\ProjectsViewModel;
+use App\Services\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -50,7 +50,8 @@ class ProjectsController extends AbstractController
     public function processProject(Request $request)
     {
         $project_input_model = new ProjectInputModel($this->entityManager, $this->validator);
-        $result = $project_input_model->createProject(new ProjectData($request));
+        $project_service = new ProjectService();
+        $result = $project_input_model->createProject($project_service->generateProjectData($request));
 
         if ($result->isValid) {
             return $this->redirect($this->generateUrl('homepage'));
