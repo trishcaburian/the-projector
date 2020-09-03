@@ -12,7 +12,7 @@
         <input type="text" id="last_name" name="last_name" required><br>
         
         <label for="user">User Account*</label><br>
-        <select id="user" id="user">
+        <select id="user" name="user_id">
             {% for user in users %}
                 <option value="{{ user.id }}">{{ user.username }}</option>
             {% endfor %}
