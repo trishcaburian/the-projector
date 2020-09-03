@@ -26,15 +26,16 @@ class PersonsController extends AbstractController
     /**
      * @Route("/persons/create", name="render_create_person", methods={"GET"})
      */
-    public function renderCreatePerson()
+    public function createPersonGet()
     {
+
         return $this->render('persons/create.html.twig');
     }
 
     /**
      * @Route("/persons/create", name="process_person", methods={"POST"})
      */
-    public function processPerson(Request $request)
+    public function createPersonPost(Request $request)
     {
         $person_input_model = new PersonInputModel($this->entityManager, $this->validator);
         $person_service = new PersonService();
