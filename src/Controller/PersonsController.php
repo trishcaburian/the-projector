@@ -11,17 +11,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PersonsController extends AbstractController
 {
     private $entityManager;
-    private $validator;
+    private $personService;
 
-    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(EntityManagerInterface $entityManager, PersonService $personService)
     {
         $this->entityManager = $entityManager;
-        $this->validator = $validator;
+        $this->personService = $personService;
     }
 
     /**
@@ -39,16 +38,17 @@ class PersonsController extends AbstractController
      */
     public function createPersonPost(Request $request)
     {
-        $person_input_model = new PersonInputModel($this->entityManager, $this->validator);
-        $person_service = new PersonService();
-        $result = $person_input_model->createPerson($person_service->generatePersonData($request));
+        $input_model = new PersonInputModel($request);
+        $result = $this->personService->createPerson($input_model);
 
         if ($result->isValid) {
             return $this->redirect($this->generateUrl('homepage'));
-        } else {
-            return new Response($this->renderView('persons/create.html.twig', [
-                'errors' => $result->result_list
-            ]));
         }
+
+        $person_vm = new PersonViewModel($this->entityManager);
+        return $this->render('persons/create.html.twig', [
+            'users' => $person_vm->getUserList(),
+            'errors'=> $result->getMessages()
+        ]);
     }
 }

@@ -1,44 +1,67 @@
 <?php
 namespace App\Model;
 
-use App\Data\CommandResultData;
-use App\Data\PersonData;
-use App\Entity\Person;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PersonInputModel
 {
-    private $entityManager;
-    private $validator;
+    /**
+     * @Assert\NotBlank(
+     *      message = "First Name cannot be blank."
+     * )
+     * 
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "First name cannot be shorter than {{ limit }} letters.",
+     *      maxMessage = "First name cannot be longer than {{ limit }} letters."
+     * )
+     * 
+     * @Assert\Regex(
+     *      pattern = "/^[a-zA-Z\s]*$/",
+     *      message = "First name can only have letters and spaces."
+     * )
+     */
+    public $first_name;
 
-    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    /**
+     * @Assert\NotBlank(
+     *      message = "Last Name cannot be blank."
+     * )
+     * 
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Last name cannot be shorter than {{ limit }} letters.",
+     *      maxMessage = "Last name cannot be longer than {{ limit }} letters."
+     * )
+     * 
+     * @Assert\Regex(
+     *      pattern = "/^[a-zA-Z\s]*$/",
+     *      message = "Last name can only have letters and spaces."
+     * )
+     */
+    public $last_name;
+    
+    /**
+     * @Assert\Type(
+     *      type="integer",
+     *      message = "User ID can only be a number."
+     * )
+     * 
+     * @Assert\NotBlank(
+     *      message = "User ID cannot be blank."
+     * )
+     */
+    public $user_id;
+
+    public function __construct(Request $request)
     {
-        $this->entityManager = $entityManager;
-        $this->validator = $validator;
-    }
-
-    public function createPerson(PersonData $person)
-    {
-        $errors = $this->validator->validate($person);
-
-        $result = new CommandResultData();
-
-        if (count($errors) > 0) {
-            $result->isValid = false;
-            $result->result_list = $errors;
-        } else {
-            $person_entity = new Person();
-            $person_entity->setFirstName($person->first_name);
-            $person_entity->setLastName($person->last_name);
-
-            $this->entityManager->persist($person_entity);
-            $this->entityManager->flush();
-
-            $result->isValid = true;
-            $result->result_list = ["Successfully created Person."];
+        if (!is_null($request)) {
+            $this->first_name = $request->request->get('first_name');
+            $this->last_name = $request->request->get('last_name');
+            $this->user_id = (int) $request->request->get('user_id');
         }
-
-        return $result;
     }
 }
