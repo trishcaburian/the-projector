@@ -25,6 +25,8 @@ use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Data\UserData;
+use App\Entity\Person;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class LoginAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
@@ -111,7 +113,15 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        $is_password_valid = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+
+        if ($is_password_valid) {
+            $person = $this->entityManager->getRepository(Person::class)->findOneBy(['user_id' => $user->getId()]);
+            setcookie("user_first_name", $person->getFirstName());
+            return true;
+        }
+
+        return false;
     }
 
     /**

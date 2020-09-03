@@ -24,6 +24,7 @@ security:
             logout:
                 path: app_logout
                 target: app_login
+                delete_cookies: ['user_first_name']
                 # where to redirect after logout
                 # target: app_any_route
 
