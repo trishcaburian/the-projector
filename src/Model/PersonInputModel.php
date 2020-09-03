@@ -2,12 +2,12 @@
 namespace App\Model;
 
 use App\Data\CommandResultData;
-use App\Data\ProjectData;
-use App\Entity\Project;
+use App\Data\PersonData;
+use App\Entity\Person;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ProjectInputModel
+class PersonInputModel
 {
     private $entityManager;
     private $validator;
@@ -18,28 +18,25 @@ class ProjectInputModel
         $this->validator = $validator;
     }
 
-    public function createProject(ProjectData $project)
+    public function createPerson(PersonData $person)
     {
-        $errors = $this->validator->validate($project);
+        $errors = $this->validator->validate($person);
 
         $result = new CommandResultData();
 
         if (count($errors) > 0) {
-            $result->result_list = $errors;
             $result->isValid = false;
+            $result->result_list = $errors;
         } else {
-            $project_entity = new Project();
-            $project_entity->setCode($project->code);
-            $project_entity->setName($project->name);
-            $project_entity->setRemarks($project->remarks);
-            $project_entity->setBudget($project->budget);
+            $person_entity = new Person();
+            $person_entity->setFirstName($person->first_name);
+            $person_entity->setLastName($person->last_name);
 
-            $this->entityManager->persist($project_entity);
-
+            $this->entityManager->persist($person_entity);
             $this->entityManager->flush();
 
-            $result->result_list = ["Project was successfully created."];
             $result->isValid = true;
+            $result->result_list = ["Successfully created Person."];
         }
 
         return $result;
