@@ -7,31 +7,31 @@ class PersonData
 {
     /**
      * @Assert\NotBlank(
-     *      message = "{{ value }} cannot be blank."
+     *      message = "First Name cannot be blank."
      * )
      * 
      * @Assert\Length(
      *      min = 2,
-     *      max = 50,
-     *      minMessage = "First name must be at least {{ limit }} characters long.",
-     *      maxMessage = "First name cannot be longer than {{ limit }} characters long."
+     *      max = 3,
+     *      minMessage = "First name cannot be shorter than {{ limit }} letters.",
+     *      maxMessage = "First name cannot be longer than {{ limit }} letters."
      * )
      */
     public $first_name;
-    
+
     /**
      * @Assert\NotBlank(
-     *      message = "{{ value }} cannot be blank."
+     *      message = "Last Name cannot be blank."
      * )
      * 
      * @Assert\Length(
      *      min = 2,
-     *      max = 50,
-     *      minMessage = "First name must be at least {{ limit }} characters long.",
-     *      maxMessage = "First name cannot be longer than {{ limit }} characters long."
+     *      max = 3,
+     *      minMessage = "Last name cannot be shorter than {{ limit }} letters.",
+     *      maxMessage = "Last name cannot be longer than {{ limit }} letters."
      * )
      */
     public $last_name;
-    
-    // public $user_id;
+
+    public $user_id;
 }
