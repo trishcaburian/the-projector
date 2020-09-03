@@ -15,7 +15,7 @@
                         <td>{{ project.name }}</td>
                         <td>{{ project.budget }}</td>
                         <td>
-                            <a href="{{ path('homepage') }}">Assignments</a>
+                            <a href="{{ path('view_assignments', { 'id': project.id }) }}">Assignments</a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -59,4 +59,12 @@ class ProjectsController extends AbstractController
             return new Response($this->renderView('projects/create.html.twig', ['errors' => $result->result_list]));
         }
     }
+
+    /**
+     * @Route("/projects/assignments/{id}", name="view_assignments", methods={"GET"})
+     */
+    public function viewAssignments(int $id)
+    {
+        var_dump($id);die;
+    }
 }
