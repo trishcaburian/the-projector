@@ -1,0 +1,12 @@
+#form_box{
+    width: 50%;
+    padding-left: 30px;
+}
+
+.regular_button{
+    width: 25%;
+}
+
+.minified{
+    width: 30%;
+}

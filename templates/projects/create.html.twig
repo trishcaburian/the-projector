@@ -3,26 +3,40 @@
 
 {% block page_header %}Create Project{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="/assets/css/creates.css">
+{% endblock %}
+
+
 {% block body %}
+    <div id="form_box">
+        <form method="post">
+            <label for="code">Code</label><br>
+            <input type="text" id="code" name="code" class="form-control" required autofocus><br>
 
-    <form method="post">
-        <label for="code">Code</label><br>
-        <input type="text" id="code" name="code" required autofocus><br>
+            <label for="name">Name</label><br>
+            <input type="text" id="name" name="name" class="form-control" required><br>
+            
+            <label for="budget">Budget</label><br>
+            <table>
+                <tr>
+                    <td>
+                        <input type="number" id="budget" name="budget" class="form-control" required>
+                    </td>
+                    <td>
+                        <select name="currency" class="form-control">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="PHP">PHP</option>
+                        </select>
+                    </td>
+                <tr>
+            </table>
 
-        <label for="name">Name</label><br>
-        <input type="text" id="name" name="name" required><br>
+            <label for="remarks">Remarks</label><br>
+            <textarea id="remarks" name="remarks" class="form-control"></textarea><br> 
 
-        <label for="budget">Budget</label><br>
-        <input type="number" id="budget" name="budget" required>
-        <select name="currency">
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="PHP">PHP</option>
-        </select><br>
-
-        <label for="remarks">Remarks</label><br>
-        <textarea id="remarks" name="remarks"></textarea><br> 
-        
-        <button type="submit">Save</button>
-    </form>
+            <button type="submit" class="btn btn-lg btn-primary btn-block regular_button">Save</button>
+        </form>
+    </div>
 {% endblock %}
