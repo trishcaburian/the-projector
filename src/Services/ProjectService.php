@@ -8,6 +8,7 @@ use App\Model\AssignmentInputModel;
 use App\Model\ProjectInputModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Services\QueryService;
 
 class ProjectService
 {
@@ -87,6 +88,34 @@ class ProjectService
         $result->addMessage("Person is now a member of Project.");
         $result->isValid = true;
 
+        return $result;
+    }
+
+    public function unassignPerson(AssignmentInputModel $project_assignment)
+    {
+        $errors = $this->validator->validate($project_assignment);
+
+        $result = new CommandResultData();
+
+        if (count($errors) > 0) {
+            $result->setMessageList($errors);
+            $result->isValid = false;
+            return $result;
+        }
+
+        $query = new QueryService($this->entityManager);
+
+        $sql = "DELETE FROM project_assignments 
+                WHERE project_id = :project_id
+                AND person_id = :person_id";
+        
+        $query->executeOnly($sql, [
+            'person_id' => $project_assignment->person_id,
+            'project_id' => $project_assignment->project_id
+        ]);
+
+        $result->addMessage('Person is unassigned from project.');
+        $result->isValid = true;
         return $result;
     }
 }

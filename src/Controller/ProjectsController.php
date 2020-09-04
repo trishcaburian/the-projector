@@ -81,5 +81,23 @@ class ProjectsController extends AbstractController
             $project_view_model = new ProjectsViewModel($this->entityManager, $this->security);
             return $this->render("responses/member.html.twig",  $project_view_model->getProjectData($input_model->project_id));
         }
+
+        return $this->render("responses/error.html.twig",  ['errors' => $result->getMessages()]);
+    }
+
+    /**
+     * @Route("/projects/unassign", name="unassign_person", methods={"POST"})
+     */
+    public function removePersonCtrl(Request $request)
+    {
+        $input_model = new AssignmentInputModel($request);
+        $result = $this->projectService->unassignPerson($input_model);
+
+        if ($result->isValid) {
+            $project_view_model = new ProjectsViewModel($this->entityManager, $this->security);
+            return $this->render("responses/non_member.html.twig",  $project_view_model->getProjectData($input_model->project_id));
+        }
+
+        return $this->render("responses/error.html.twig",  ['errors' => $result->getMessages()]);
     }
 }

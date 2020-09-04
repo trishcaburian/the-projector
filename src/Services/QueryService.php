@@ -25,4 +25,16 @@ class QueryService
 
         return $result;
     }
+
+    public function executeOnly($sql, $params = null)
+    {
+        $conn = $this->entityManager->getConnection();
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+
+        $conn->close();
+
+        return true;
+    }
 }

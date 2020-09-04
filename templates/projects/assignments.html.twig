@@ -3,6 +3,23 @@
 
 {% block page_header %}Project Assignments - [{{ project_info.name }}]{% endblock %}
 
+{# move to separate file later #}
+{% block stylesheets %}
+    <style>
+        .remove_button {
+            background: none!important;
+            border: none;
+            padding: 0!important;
+            /*optional*/
+            font-family: arial, sans-serif;
+            /*input has OS specific font-family*/
+            color: #069;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <form id="addUserForm" method="POST">
         <label for="add_user">New Member</label><br>
@@ -15,25 +32,27 @@
         <button type="submit">Add</button>
     </form>
 
-    <form id="removeUserForm">
-        <table id="memberList">
-            {% for member in members %}
-                <tr>
-                    <td>{{ member.first_name }} {{ member.last_name }}</td>
-                    <td><a href="" onclick="document.getElementById('removeUserForm').submit();">Remove</a></td>
-                </tr>
-            {% endfor %}
-        </table>
-    </form>
+    <table id="memberList">
+        {% for member in members %}
+            <tr>
+                <td>{{ member.first_name }} {{ member.last_name }}</td>
+                <td><input type="button" class="remove_button" name="submit" value="Remove" />
+                <form id="removeUserForm_{{ member.id }}" name="removeUserForm">
+                    <input type="hidden" value="{{ project_info.id }}" name="project_id">
+                    <input type="hidden" value="{{ member.id }}" name="person_id">
+                </form>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 
 {% block javascripts %}
     <script>
         $('#addUserForm').submit(function(e){
-            submitRequest(e, '{{ path("assign_person") }}');
+            addPerson(e, '{{ path("assign_person") }}');
         });
 
-        function submitRequest(e, path){
+        function addPerson(e, path){
             e.preventDefault();
 
             var id = document.getElementById("add_user").value;
@@ -53,9 +72,34 @@
                     document.querySelector('#memberList').insertAdjacentHTML('beforeend', result);
                 },
                 error: function(result){
-                    console.log(result);
+                    document.getElementById("errors").innerHTML = "";
+                    document.querySelector('#errors').insertAdjacentHTML('beforeend', result);
                 }
             });
         }
+
+        $('#memberList').on('click', 'input[type="button"]', function(e){    
+            e.preventDefault();
+            var table_row = $(this).closest('tr');
+            var parent_node = event.target.parentNode;
+            var input_form = parent_node.querySelector('form[name="removeUserForm"]');
+            var input_form_id = '#' + input_form.id;
+
+            $.ajax({
+                url: "{{ path('unassign_person') }}",
+                type: 'post',
+                data:$(input_form_id).serialize(),
+                success:function(result){
+                    console.log(result);
+                    document.getElementById("add_user").innerHTML = "";
+                    document.querySelector('#add_user').insertAdjacentHTML('beforeend', result);
+                    table_row.remove();
+                },
+                error: function(result){
+                    document.getElementById("errors").innerHTML = "";
+                    document.querySelector('#errors').insertAdjacentHTML('beforeend', result);
+                }
+            });
+        })
     </script>
 {% endblock %}

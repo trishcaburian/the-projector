@@ -1,6 +1,10 @@
 {% for member in members %}
     <tr>
         <td>{{ member.first_name }} {{ member.last_name }}</td>
-        <td><a href="" onclick="document.getElementById('removeUserForm').submit();">Remove</a></td>
+        <td><input type="button" class="remove_button" name="submit" value="Remove" />
+        <form id="removeUserForm_{{ member.id }}" name="removeUserForm">
+            <input type="hidden" value="{{ project_info.id }}" name="project_id">
+            <input type="hidden" value="{{ member.id }}" name="person_id">
+        </form>
     </tr>
 {% endfor %}

@@ -1,0 +1,3 @@
+{% for non_member in non_members %}
+    <option id="person_{{ non_member.id }}" value={{ non_member.id }}>{{ non_member.first_name }} {{ non_member.last_name }}</option>
+{% endfor %}
