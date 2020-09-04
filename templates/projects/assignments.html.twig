@@ -35,8 +35,6 @@
 
         function submitRequest(e, path){
             e.preventDefault();
-        
-            document.getElementById("memberList").innerHTML = "";
 
             var id = document.getElementById("add_user").value;
             
@@ -51,6 +49,7 @@
                         person.parentNode.removeChild(person);
                     }
 
+                    document.getElementById("memberList").innerHTML = "";
                     document.querySelector('#memberList').insertAdjacentHTML('beforeend', result);
                 },
                 error: function(result){
