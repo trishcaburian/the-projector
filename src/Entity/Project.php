@@ -37,6 +37,11 @@ class Project
      */
     private $budget;
 
+    /**
+     * @ORM\Column(type="string", length=3)
+     */
+    private $currency;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Project
     public function setBudget(int $budget): self
     {
         $this->budget = $budget;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): self
+    {
+        $this->currency = $currency;
 
         return $this;
     }

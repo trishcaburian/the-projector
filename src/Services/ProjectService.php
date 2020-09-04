@@ -44,6 +44,7 @@ class ProjectService
         $project_entity->setName($project->name);
         $project_entity->setRemarks($project->remarks);
         $project_entity->setBudget($project->budget);
+        $project_entity->setCurrency($project->currency);
 
         $this->entityManager->persist($project_entity);
 
