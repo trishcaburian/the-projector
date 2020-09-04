@@ -1,0 +1,34 @@
+#app_name{
+    position: absolute;
+    padding-bottom: 25px;
+}
+
+#user_greeting{
+    float: right;
+}
+
+#header_container{
+    background-color: #f5f2e9;
+    padding-top: 20px;
+    padding-right: 75px;
+    padding-left: 20px;
+    height: 100px;
+}
+
+#project_list{
+    width: 50%;
+    position: absolute;
+}
+
+#actions_box{
+    border-style: solid;
+    float:right;
+    margin-right: 25%;
+    height: 100px;
+    width: 300px;
+    padding: 10px;
+}
+
+#actions_contents{
+    text-align: left;
+}

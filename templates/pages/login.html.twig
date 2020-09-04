@@ -1,6 +1,10 @@
 {% extends "base.html.twig" %}
 {% block title %}Login{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="/assets/css/login.css">
+{% endblock %}
+
 {% block body %}
     {% if messages is defined %}
         <ul>
@@ -10,16 +14,17 @@
         </ul>
     {% endif %}
 
-    <form method="post">
+<div class="container login_box text-center">
+    <h2>Sign In</h2>
+    <form method="post" class="form-signin">
         <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
         >
-        <div>
-            Username: <input type="text" name="username" required autofocus>
-        </div>
-        <div>
-            Password: <input type="password" name="password">
-        </div>
-        <button type="submit">Submit</button>
+
+        <input type="text" class="form-control input_size" name="username" placeholder="Email address" required autofocus>
+        <input type="password" class="form-control input_size" name="password" placeholder="Password" required>
+        <br>
+        <button type="submit" class="btn btn-lg btn-primary btn-block input_size">Submit</button>
     </form>
+</div>
 {% endblock %}
