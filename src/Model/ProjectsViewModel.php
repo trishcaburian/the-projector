@@ -48,7 +48,7 @@ class ProjectsViewModel
     private function getMembersOfProject($project_id)
     {
         $sql = "SELECT p.* FROM person AS p 
-                JOIN projectassignments as pa
+                JOIN project_assignments as pa
                 WHERE pa.project_id = :project_id
                 AND pa.person_id = p.id";
 
@@ -61,7 +61,7 @@ class ProjectsViewModel
     {
         $sql = "SELECT p.*
                 FROM person p
-                LEFT JOIN projectassignments pa
+                LEFT JOIN project_assignments pa
                 ON p.id = pa.person_id
                 AND pa.project_id = :project_id
                 WHERE pa.person_id IS NULL";
