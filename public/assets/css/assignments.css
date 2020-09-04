@@ -9,3 +9,16 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
+#add_user{
+    width: 200px;
+}
+
+td {
+    padding-right: 100px;
+}
+
+#members_box {
+    margin-top: 20px;
+    padding-left: 30px;
+}

@@ -4,33 +4,39 @@
 {% block page_header %}Project Assignments - [{{ project_info.name }}]{% endblock %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" href="/assets/css/creates.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/assignments.css">
 {% endblock %}
 
 {% block body %}
-    <form id="addUserForm" method="POST">
-        <label for="add_user">New Member</label><br>
-        <select id="add_user" name="person_id">
-            {% for non_member in non_members %}
-                <option id="person_{{ non_member.id }}" value={{ non_member.id }}>{{ non_member.first_name }} {{ non_member.last_name }}</option>
-            {% endfor %}
-        </select>
-        <input type="hidden" value="{{ project_info.id }}" name="project_id">
-        <button type="submit">Add</button>
-    </form>
+    <div id="form_box">
+        <form id="addUserForm" method="POST">
+            <label for="add_user">New Member</label><br>
+            <select id="add_user" name="person_id">
+                {% for non_member in non_members %}
+                    <option id="person_{{ non_member.id }}" value={{ non_member.id }}>{{ non_member.first_name }} {{ non_member.last_name }}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" value="{{ project_info.id }}" name="project_id">
+            <button type="submit" >Add</button>
+        </form>
+    </div>
 
-    <table id="memberList">
-        {% for member in members %}
-            <tr>
-                <td>{{ member.first_name }} {{ member.last_name }}</td>
-                <td><input type="button" class="remove_button" name="submit" value="Remove" />
-                <form id="removeUserForm_{{ member.id }}" name="removeUserForm">
-                    <input type="hidden" value="{{ project_info.id }}" name="project_id">
-                    <input type="hidden" value="{{ member.id }}" name="person_id">
-                </form>
-            </tr>
-        {% endfor %}
-    </table>
+    <div id="members_box">
+        Current Members
+        <table id="memberList">
+            {% for member in members %}
+                <tr>
+                    <td>{{ member.first_name }} {{ member.last_name }}</td>
+                    <td><input type="button" class="remove_button" name="submit" value="Remove" />
+                    <form id="removeUserForm_{{ member.id }}" name="removeUserForm">
+                        <input type="hidden" value="{{ project_info.id }}" name="project_id">
+                        <input type="hidden" value="{{ member.id }}" name="person_id">
+                    </form>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
