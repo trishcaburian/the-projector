@@ -58,6 +58,13 @@ class ProjectInputModel
      * )
      */
     public $budget;
+
+    /**
+     * @Assert\NotBlank(
+     *      message = "{{ value }} cannot be blank"
+     * )
+     */
+    public $currency;
     
     public function __construct(Request $request)
     {
@@ -66,6 +73,7 @@ class ProjectInputModel
             $this->name = $request->request->get('name');
             $this->remarks = $request->request->get('remarks');
             $this->budget = $request->request->get('budget');
+            $this->currency = $request->request->get('currency');
         }
     }
 }
