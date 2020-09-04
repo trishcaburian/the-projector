@@ -40,7 +40,7 @@ class ProjectsViewModel
 
     private function getAllProjects()
     {
-        $sql = "SELECT * FROM project";
+        $sql = "SELECT *, FORMAT(budget, 2) as budget_f FROM project";
 
         return $this->queryService->genericSQL($sql);
     }

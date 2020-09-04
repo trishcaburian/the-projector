@@ -13,7 +13,7 @@
                 {% for project in projects %}
                     <tr>
                         <td>{{ project.name }}</td>
-                        <td>{{ project.currency }} {{ project.budget }}</td>
+                        <td>{{ project.currency }} {{ project.budget_f }}</td>
                         <td>
                             <a href="{{ path('view_assignments', { 'id': project.id }) }}">Assignments</a>
                         </td>
