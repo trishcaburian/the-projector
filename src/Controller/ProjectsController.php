@@ -29,7 +29,7 @@ class ProjectsController extends AbstractController
     /**
      * @Route("/projects", name="homepage", methods={"GET"})
      */
-    public function projectsPage()
+    public function index()
     {
         $projects_vm = new ProjectsViewModel($this->entityManager, $this->security);
 
