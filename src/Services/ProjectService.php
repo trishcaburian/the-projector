@@ -66,6 +66,26 @@ class ProjectService
         return false;
     }
 
+    private function isAlreadyMember(AssignmentInputModel $project_assignment)
+    {
+        $query = new QueryService($this->entityManager);
+
+        $sql = "SELECT * FROM project_assignments 
+                WHERE project_id = :project_id
+                AND person_id = :person_id";
+        
+        $result = $query->genericSQL($sql, [
+            'person_id' => $project_assignment->person_id,
+            'project_id' => $project_assignment->project_id
+        ]);
+
+        if (!empty($result) || !is_null($result)) {
+            return false;
+        }
+        
+        return true;
+    }
+
     public function assignPerson(AssignmentInputModel $project_assignment)
     {
         $errors = $this->validator->validate($project_assignment);
@@ -75,6 +95,14 @@ class ProjectService
         if (count($errors) > 0) {
             $result->setMessageList($errors);
             $result->isValid = false;
+            return $result;
+        }
+        
+        if ($this->isAlreadyMember($project_assignment))
+        {
+            $result->addMessage('This Person is already a member of this Project!');
+            $result->isValid = false;
+
             return $result;
         }
 
