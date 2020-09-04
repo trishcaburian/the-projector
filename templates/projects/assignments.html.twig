@@ -4,20 +4,59 @@
 {% block page_header %}Project Assignments - [{{ project_info.name }}]{% endblock %}
 
 {% block body %}
-    <label for="add_user">New Member</label><br>
-    <select id="add_user" name="add_user">
-        {% for non_member in non_members %}
-            <option value={{ non_member.id }}>{{ non_member.first_name }} {{ non_member.last_name }}</option>
-        {% endfor %}
-    </select>
-    <button type="submit">Add</button>
+    <form id="addUserForm" method="POST">
+        <label for="add_user">New Member</label><br>
+        <select id="add_user" name="person_id">
+            {% for non_member in non_members %}
+                <option id="person_{{ non_member.id }}" value={{ non_member.id }}>{{ non_member.first_name }} {{ non_member.last_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" value="{{ project_info.id }}" name="project_id">
+        <button type="submit">Add</button>
+    </form>
 
-    <table>
-        {% for member in members %}
-            <tr>
-                <td>{{ member.first_name }} {{ member.last_name }}</td>
-                <td><a href="">Remove</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+    <form id="removeUserForm">
+        <table id="memberList">
+            {% for member in members %}
+                <tr>
+                    <td>{{ member.first_name }} {{ member.last_name }}</td>
+                    <td><a href="" onclick="document.getElementById('removeUserForm').submit();">Remove</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#addUserForm').submit(function(e){
+            submitRequest(e, '{{ path("assign_person") }}');
+        });
+
+        function submitRequest(e, path){
+            e.preventDefault();
+        
+            document.getElementById("memberList").innerHTML = "";
+
+            var id = document.getElementById("add_user").value;
+            
+            $.ajax({
+                url: path,
+                type: 'post',
+                data:$('#addUserForm').serialize(),
+                success:function(result){
+                    var person = document.querySelector('#person_'+id);
+
+                    if (person !== null) {
+                        person.parentNode.removeChild(person);
+                    }
+
+                    document.querySelector('#memberList').insertAdjacentHTML('beforeend', result);
+                },
+                error: function(result){
+                    console.log(result);
+                }
+            });
+        }
+    </script>
 {% endblock %}

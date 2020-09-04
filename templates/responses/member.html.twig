@@ -1,0 +1,6 @@
+{% for member in members %}
+    <tr>
+        <td>{{ member.first_name }} {{ member.last_name }}</td>
+        <td><a href="" onclick="document.getElementById('removeUserForm').submit();">Remove</a></td>
+    </tr>
+{% endfor %}

@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Data\CommandResultData;
 use App\Entity\Project;
+use App\Entity\ProjectAssignments;
+use App\Model\AssignmentInputModel;
 use App\Model\ProjectInputModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -61,5 +63,30 @@ class ProjectService
         }
 
         return false;
+    }
+
+    public function assignPerson(AssignmentInputModel $project_assignment)
+    {
+        $errors = $this->validator->validate($project_assignment);
+
+        $result = new CommandResultData();
+
+        if (count($errors) > 0) {
+            $result->setMessageList($errors);
+            $result->isValid = false;
+            return $result;
+        }
+
+        $assignment_entity = new ProjectAssignments();
+        $assignment_entity->setPersonId($project_assignment->person_id);
+        $assignment_entity->setProjectId($project_assignment->project_id);
+
+        $this->entityManager->persist($assignment_entity);
+        $this->entityManager->flush();
+
+        $result->addMessage("Person is now a member of Project.");
+        $result->isValid = true;
+
+        return $result;
     }
 }

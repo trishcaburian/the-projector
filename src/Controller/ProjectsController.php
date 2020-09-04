@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\AssignmentInputModel;
 use App\Model\ProjectInputModel;
 use App\Model\ProjectsViewModel;
 use App\Services\ProjectService;
@@ -66,5 +67,19 @@ class ProjectsController extends AbstractController
         $project_view_model = new ProjectsViewModel($this->entityManager, $this->security);
 
         return $this->render('projects/assignments.html.twig', $project_view_model->getProjectData($id));
+    }
+
+    /**
+     * @Route("/projects/assign", name="assign_person", methods={"POST"} )
+     */
+    public function assignPersonCtrl(Request $request)
+    {
+        $input_model = new AssignmentInputModel($request);
+        $result = $this->projectService->assignPerson($input_model);
+
+        if ($result->isValid) {
+            $project_view_model = new ProjectsViewModel($this->entityManager, $this->security);
+            return $this->render("responses/member.html.twig",  $project_view_model->getProjectData($input_model->project_id));
+        }
     }
 }
