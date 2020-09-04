@@ -90,7 +90,6 @@
                 type: 'post',
                 data:$(input_form_id).serialize(),
                 success:function(result){
-                    console.log(result);
                     document.getElementById("add_user").innerHTML = "";
                     document.querySelector('#add_user').insertAdjacentHTML('beforeend', result);
                     table_row.remove();
