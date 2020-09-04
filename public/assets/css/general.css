@@ -3,6 +3,10 @@
     padding-bottom: 25px;
 }
 
+#app_name:hover{
+    color: #858585
+}
+
 #user_greeting{
     float: right;
 }
@@ -18,6 +22,8 @@
 #project_list{
     width: 50%;
     position: absolute;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 #actions_box{

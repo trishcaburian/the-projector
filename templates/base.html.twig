@@ -32,6 +32,12 @@
         </div>
 
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script>
+                $("#app_name").click(function(){
+                    window.location.replace("{{ path('homepage') }}");
+                });
+            </script>
+        {% endblock %}
     </body>
 </html>
